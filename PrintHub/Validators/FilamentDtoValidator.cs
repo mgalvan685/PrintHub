@@ -1,0 +1,28 @@
+﻿using FluentValidation;
+using PrintHub.DTOs;
+
+namespace PrintHub.Validators;
+
+public class FilamentDtoValidator : AbstractValidator<NewFilamentDto>
+{
+    public FilamentDtoValidator()
+    {
+        RuleFor(x => x.Brand)
+            .NotEmpty().WithMessage("Brand is required.")
+            .MaximumLength(50);
+
+        RuleFor(x => x.Material)
+            .NotEmpty().WithMessage("Material is required.")
+            .MaximumLength(50);
+
+        RuleFor(x => x.Color)
+            .NotEmpty().WithMessage("Color is required.")
+            .MaximumLength(50);
+
+        RuleFor(x => x.Weight_Grams)
+            .GreaterThan(0).WithMessage("Weight must be greater than zero.");
+
+        RuleFor(x => x.Cost)
+            .GreaterThan(0).WithMessage("Cost must be greater than zero.");
+    }
+}
