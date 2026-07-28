@@ -3,9 +3,9 @@ using PrintHub.DTOs;
 
 namespace PrintHub.Validators;
 
-public class FilamentDtoValidator : AbstractValidator<NewFilamentDto>
+public class NewFilamentDtoValidator : AbstractValidator<NewFilamentDto>
 {
-    public FilamentDtoValidator()
+    public NewFilamentDtoValidator()
     {
         RuleFor(x => x.Brand)
             .NotEmpty().WithMessage("Brand is required.")
