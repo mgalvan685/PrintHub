@@ -21,6 +21,7 @@ public class FilamentService : IFilamentService
         {
             Brand = dto.Brand,
             Material = dto.Material,
+            Texture = dto.Texture,
             Color = dto.Color,
             Weight_Grams = dto.Weight_Grams,
             Cost = dto.Cost
@@ -34,6 +35,7 @@ public class FilamentService : IFilamentService
             Id = filament.Id,
             Brand = filament.Brand,
             Material = filament.Material,
+            Texture = filament.Texture,
             Color = filament.Color,
             Weight_Grams = filament.Weight_Grams,
             Cost = filament.Cost
@@ -54,6 +56,7 @@ public class FilamentService : IFilamentService
             Id = filament.Id,
             Brand = filament.Brand,
             Material = filament.Material,
+            Texture = filament.Texture,
             Color = filament.Color,
             Weight_Grams = filament.Weight_Grams,
             Cost = filament.Cost
@@ -69,6 +72,7 @@ public class FilamentService : IFilamentService
                 Id = f.Id,
                 Brand = f.Brand,
                 Material = f.Material,
+                Texture = f.Texture,
                 Color = f.Color,
                 Weight_Grams = f.Weight_Grams,
                 Cost = f.Cost
@@ -84,6 +88,7 @@ public class FilamentService : IFilamentService
 
         filament.Brand = dto.Brand ?? filament.Brand;
         filament.Material = dto.Material ?? filament.Material;
+        filament.Texture = dto.Texture ?? filament.Texture;
         filament.Color = dto.Color ?? filament.Color;
         filament.Weight_Grams = dto.Weight_Grams ?? filament.Weight_Grams;
         filament.Cost = dto.Cost ?? filament.Cost;
@@ -95,6 +100,7 @@ public class FilamentService : IFilamentService
             Id = filament.Id,
             Brand = filament.Brand,
             Material = filament.Material,
+            Texture = filament.Texture,
             Color = filament.Color,
             Weight_Grams = filament.Weight_Grams,
             Cost = filament.Cost
@@ -112,4 +118,10 @@ public class FilamentService : IFilamentService
 
         return true;
     }
+
+    public async Task<Filament?> FindByLegacyIdAsync(int legacyId)
+    {
+        return await _context.Filaments.FirstOrDefaultAsync(f => f.Legacy_Id == legacyId);
+    }
+
 }

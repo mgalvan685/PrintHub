@@ -8,7 +8,7 @@ public class Project : BaseEntity
     public int Printer_ID { get; set; }
     public Printer Printer { get; set; } = null!;
 
-    public decimal Print_Time { get; set; } // hours
+    public string Print_Time { get; set; } = "00:00:00"; // HH:mm:ss
     public decimal Labor { get; set; }      // minutes
 
     public ICollection<ProjectFilament> ProjectFilaments { get; set; } = new List<ProjectFilament>();

@@ -14,6 +14,7 @@ public class MaterialDto
 
 public class NewMaterialDto
 {
+    public int? Legacy_Id { get; set; } = null; // optional, for legacy data import
     public string Name { get; set; } = string.Empty;
     public decimal Initial_Cost { get; set; }
     public string Units { get; set; } = string.Empty;

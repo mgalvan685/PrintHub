@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PrintHub.Database;
@@ -11,9 +12,11 @@ using PrintHub.Database;
 namespace PrintHub.Migrations
 {
     [DbContext(typeof(PrintHubContext))]
-    partial class PrintHubContextModelSnapshot : ModelSnapshot
+    [Migration("20260729172804_UpdateProjectPrintTimeFormat")]
+    partial class UpdateProjectPrintTimeFormat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,9 +48,6 @@ namespace PrintHub.Migrations
 
                     b.Property<decimal>("Labor_Cost")
                         .HasColumnType("numeric");
-
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
 
                     b.Property<decimal>("Material_Cost")
                         .HasColumnType("numeric");
@@ -103,9 +103,6 @@ namespace PrintHub.Migrations
                     b.Property<DateTime>("Created_On")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Material")
                         .IsRequired()
                         .HasColumnType("text");
@@ -150,9 +147,6 @@ namespace PrintHub.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("text");
@@ -188,9 +182,6 @@ namespace PrintHub.Migrations
 
                     b.Property<decimal>("Initial_Cost")
                         .HasColumnType("numeric");
-
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -237,9 +228,6 @@ namespace PrintHub.Migrations
 
                     b.Property<decimal>("Labor_Time")
                         .HasColumnType("numeric");
-
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
 
                     b.Property<decimal>("Power_Usage")
                         .HasColumnType("numeric");
@@ -288,9 +276,6 @@ namespace PrintHub.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Notes")
                         .HasColumnType("text");
 
@@ -332,9 +317,6 @@ namespace PrintHub.Migrations
                     b.Property<DateTime>("Created_On")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
@@ -374,9 +356,6 @@ namespace PrintHub.Migrations
 
                     b.Property<decimal>("Labor")
                         .HasColumnType("numeric");
-
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -423,9 +402,6 @@ namespace PrintHub.Migrations
                     b.Property<int>("Filament_ID")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Project_ID")
                         .HasColumnType("integer");
 
@@ -461,9 +437,6 @@ namespace PrintHub.Migrations
 
                     b.Property<DateTime>("Created_On")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<int?>("Legacy_Id")
-                        .HasColumnType("integer");
 
                     b.Property<int>("Material_ID")
                         .HasColumnType("integer");

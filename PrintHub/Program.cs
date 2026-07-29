@@ -1,12 +1,25 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using PrintHub.Database;
+using PrintHub.Legacy.Services;
+using PrintHub.Legacy.Services.Interfaaces;
+using PrintHub.Mappers;
 using PrintHub.Services;
+using PrintHub.Services.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddScoped<PrinterService>();
+builder.Services.AddScoped<IPrinterService, PrinterService>();
+builder.Services.AddScoped<IFilamentService, FilamentService>();
+builder.Services.AddScoped<IMaterialService, MaterialService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
+
+// Legacy services
+builder.Services.AddScoped<IImportService, ImportService>();
+
+builder.Services.AddAutoMapper(typeof(ProjectProfile));
 
 builder.Services.AddControllers();
 

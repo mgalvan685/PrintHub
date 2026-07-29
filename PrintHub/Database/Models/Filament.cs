@@ -4,6 +4,7 @@ public class Filament : BaseEntity
 {
     public string Brand { get; set; } = null!;
     public string Material { get; set; } = null!;
+    public string Texture { get; set; } = null!;
     public string Color { get; set; } = null!;
     public decimal Weight_Grams { get; set; }
     public decimal Cost { get; set; }

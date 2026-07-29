@@ -81,19 +81,66 @@ public static class FilamentMaterialConstants
     };
 }
 
+public static class FilamentTextureConstants
+{
+    public const string BASIC = "Basic";
+    public const string MATTE = "Matte";
+    public const string SILK = "Silk";
+    public const string GLOSSY = "Glossy";
+    public const string TRANSLUCENT = "Translucent";
+    public const string TRANSPARENT = "Transparent";
+    public const string METALLIC = "Metallic";
+    public const string WOOD = "Wood";
+
+    public static readonly string[] ALL = new[]
+    {
+        BASIC,
+        MATTE,
+        SILK,
+        GLOSSY,
+        TRANSLUCENT,
+        TRANSPARENT,
+        METALLIC,
+        WOOD
+    };
+}
+
+public static class FilamentWeightConstants
+{
+    // TODO: should this be an enum so it can grab the text ("250 grams") and the value (.250m) together?
+    public const decimal GRAMS_250 = .250m; // 250 grams
+    public const decimal GRAMS_500 = .500m; // 500 grams
+    public const decimal GRAMS_750 = .750m; // 750 grams
+    public const decimal KILOGRAM_1 = 1m;   // 1 kilogram
+    public const decimal KILOGRAM_2 = 2m;   // 2 kilogram
+
+    public const decimal DEFAULT = KILOGRAM_1;
+
+    public static readonly decimal[] ALL = new[]
+    {
+        GRAMS_250,
+        GRAMS_500,
+        GRAMS_750,
+        KILOGRAM_1,
+        KILOGRAM_2
+    };
+}
+
 public static class MaterialUnitConstants
 {
-    public const string EACH = "ea";
-    public const string GRAMS = "g";
-    public const string MILLILITERS = "ml";
-    public const string INCHES = "in";
+    public const string EACH = "Each";
+    public const string GRAMS = "Grams";
+    public const string MILLILITERS = "Milliliters";
+    public const string INCHES = "Inches";
+    public const string FEET = "Feet";
 
     public static readonly string[] ALL = new[]
     {
         EACH,
         GRAMS,
         MILLILITERS,
-        INCHES
+        INCHES,
+        FEET
     };
 }
 

@@ -92,5 +92,11 @@ public class MaterialService : IMaterialService
             Source = m.Source
         };
     }
+
+    public async Task<Material?> FindByLegacyIdAsync(int legacyId)
+    {
+        return await _context.Materials.FirstOrDefaultAsync(m => m.Legacy_Id == legacyId);
+    }
+
 }
 

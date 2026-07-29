@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using PrintHub.DTOs;
+using PrintHub.Helpers;
 
 namespace PrintHub.Validators;
 
@@ -14,6 +15,11 @@ public class NewFilamentDtoValidator : AbstractValidator<NewFilamentDto>
         RuleFor(x => x.Material)
             .NotEmpty().WithMessage("Material is required.")
             .MaximumLength(50);
+
+        RuleFor(x => x.Texture)
+            .Must(FilamentTextureConstants.ALL.Contains)
+            .WithMessage("Invalid filament texture.");
+
 
         RuleFor(x => x.Color)
             .NotEmpty().WithMessage("Color is required.")
