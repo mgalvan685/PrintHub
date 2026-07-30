@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using PrintHub.Database;
 using PrintHub.Database.Models;
 using PrintHub.DTOs;
@@ -6,17 +8,25 @@ using PrintHub.Services.Interfaces;
 
 namespace PrintHub.Services;
 
-public class FilamentService : IFilamentService
+public class FilamentService : BaseService, IFilamentService
 {
     private readonly PrintHubContext _context;
+    private readonly IValidator<NewFilamentDto> _newValidator;
+    private readonly IValidator<UpdateFilamentDto> _updateValidator;
 
-    public FilamentService(PrintHubContext context)
+    public FilamentService(PrintHubContext context, IValidator<NewFilamentDto> newValidator, IValidator<UpdateFilamentDto> updateValidator)
     {
         _context = context;
+        _newValidator = newValidator;
+        _updateValidator = updateValidator;
     }
 
     public async Task<FilamentDto> CreateFilamentAsync(NewFilamentDto dto)
     {
+        var validationResult = await _newValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
         var filament = new Filament
         {
             Brand = dto.Brand,
@@ -26,6 +36,8 @@ public class FilamentService : IFilamentService
             Weight_Grams = dto.Weight_Grams,
             Cost = dto.Cost
         };
+
+        SetCreatedFields(filament);
 
         _context.Filaments.Add(filament);
         await _context.SaveChangesAsync();
@@ -82,6 +94,10 @@ public class FilamentService : IFilamentService
 
     public async Task<FilamentDto?> UpdateFilamentAsync(int id, UpdateFilamentDto dto)
     {
+        var validationResult = await _updateValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
         var filament = await _context.Filaments.FirstOrDefaultAsync(f => f.Id == id);
         if (filament == null)
             return null;
@@ -92,6 +108,8 @@ public class FilamentService : IFilamentService
         filament.Color = dto.Color ?? filament.Color;
         filament.Weight_Grams = dto.Weight_Grams ?? filament.Weight_Grams;
         filament.Cost = dto.Cost ?? filament.Cost;
+
+        SetUpdatedFields(filament);
 
         await _context.SaveChangesAsync();
 

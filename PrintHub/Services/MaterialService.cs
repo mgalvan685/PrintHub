@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using PrintHub.Database;
 using PrintHub.Database.Models;
 using PrintHub.DTOs;
@@ -6,17 +7,25 @@ using PrintHub.Services.Interfaces;
 
 namespace PrintHub.Services;
 
-public class MaterialService : IMaterialService
+public class MaterialService : BaseService, IMaterialService
 {
     private readonly PrintHubContext _context;
+    private readonly IValidator<NewMaterialDto> _newValidator;
+    private readonly IValidator<UpdateMaterialDto> _updateValidator;
 
-    public MaterialService(PrintHubContext context)
+    public MaterialService(PrintHubContext context, IValidator<NewMaterialDto> newValidator, IValidator<UpdateMaterialDto> updateValidator)
     {
         _context = context;
+        _newValidator = newValidator;
+        _updateValidator = updateValidator;
     }
 
     public async Task<MaterialDto> CreateMaterialAsync(NewMaterialDto dto)
     {
+        var validationResult = await _newValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
         var material = new Material
         {
             Name = dto.Name,
@@ -26,6 +35,8 @@ public class MaterialService : IMaterialService
             Cost_Per_Unit = dto.Cost_Per_Unit,
             Source = dto.Source
         };
+
+        SetCreatedFields(material);
 
         _context.Materials.Add(material);
         await _context.SaveChangesAsync();
@@ -52,6 +63,10 @@ public class MaterialService : IMaterialService
 
     public async Task<MaterialDto?> UpdateMaterialAsync(int id, UpdateMaterialDto dto)
     {
+        var validationResult = await _updateValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
         var material = await _context.Materials.FirstOrDefaultAsync(m => m.Id == id);
         if (material == null)
             return null;
@@ -62,6 +77,8 @@ public class MaterialService : IMaterialService
         material.Total_Material = dto.Total_Material ?? material.Total_Material;
         material.Cost_Per_Unit = dto.Cost_Per_Unit ?? material.Cost_Per_Unit;
         material.Source = dto.Source ?? material.Source;
+
+        SetUpdatedFields(material);
 
         await _context.SaveChangesAsync();
 

@@ -1,4 +1,6 @@
-﻿namespace PrintHub.Database.Models;
+﻿using PrintHub.Helpers;
+
+namespace PrintHub.Database.Models;
 
 public class BaseEntity
 {
@@ -9,5 +11,6 @@ public class BaseEntity
     public DateTime Created_On { get; set; }
     public DateTime? Updated_On { get; set; }
 
-    public string Created_By { get; set; } = "system";
+    public string Created_By { get; set; } = SystemUsersConstants.SYSTEM_USER;
+    public string? Updated_By { get; set; }
 }

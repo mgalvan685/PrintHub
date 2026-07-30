@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PrintHub.Database.Models;
 using PrintHub.DTOs;
-using PrintHub.Services;
+using PrintHub.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 [ApiController]
 [Route("api/[controller]")]
 public class PrintersController : ControllerBase
 {
-    private readonly PrinterService _service;
+    private readonly IPrinterService _service;
 
-    public PrintersController(PrinterService service)
+    public PrintersController(IPrinterService service)
     {
         _service = service;
     }
@@ -19,9 +19,16 @@ public class PrintersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] NewPrinterDto newPrinter)
     {
-        var result = await _service.CreatePrinterAsync(newPrinter);
+        try
+        {
+            var result = await _service.CreatePrinterAsync(newPrinter);
 
-        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
 
@@ -51,11 +58,18 @@ public class PrintersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdatePrinterDto dto)
     {
-        var updated = await _service.UpdatePrinterAsync(id, dto);
-        if (updated == null)
-            return NotFound();
+        try
+        {
+            var updated = await _service.UpdatePrinterAsync(id, dto);
+            if (updated == null)
+                return NotFound();
 
-        return Ok(updated);
+            return Ok(updated);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]

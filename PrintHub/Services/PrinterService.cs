@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using PrintHub.Database;
 using PrintHub.Database.Models;
 using PrintHub.DTOs;
@@ -6,17 +7,25 @@ using PrintHub.Services.Interfaces;
 
 namespace PrintHub.Services;
 
-public class PrinterService : IPrinterService
+public class PrinterService : BaseService, IPrinterService
 {
     private readonly PrintHubContext _context;
+    private readonly IValidator<NewPrinterDto> _newValidator;
+    private readonly IValidator<UpdatePrinterDto> _updateValidator;
 
-    public PrinterService(PrintHubContext context)
+    public PrinterService(PrintHubContext context, IValidator<NewPrinterDto> newValidator, IValidator<UpdatePrinterDto> updateValidator)
     {
         _context = context;
+        _newValidator = newValidator;
+        _updateValidator = updateValidator;
     }
 
     public async Task<Printer> CreatePrinterAsync(NewPrinterDto newPrinter)
     {
+        var validationResult = await _newValidator.ValidateAsync(newPrinter);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
         var printer = new Printer
         {
             Brand = newPrinter.Brand,
@@ -24,6 +33,8 @@ public class PrinterService : IPrinterService
             Name = newPrinter.Name,
             Power_Per_Hour = newPrinter.Power_Per_Hour
         };
+
+        SetCreatedFields(printer);
 
         _context.Printers.Add(printer);
         await _context.SaveChangesAsync();
@@ -50,6 +61,10 @@ public class PrinterService : IPrinterService
 
     public async Task<PrinterDto?> UpdatePrinterAsync(int id, UpdatePrinterDto dto)
     {
+        var validationResult = await _updateValidator.ValidateAsync(dto);
+        if (!validationResult.IsValid)
+            throw new ValidationException(validationResult.Errors);
+
         var printer = await _context.Printers.FirstOrDefaultAsync(p => p.Id == id);
         if (printer == null)
             return null;
@@ -58,6 +73,8 @@ public class PrinterService : IPrinterService
         printer.Type = dto.Type ?? printer.Type;
         printer.Name = dto.Name ?? printer.Name;
         printer.Power_Per_Hour = dto.Power_Per_Hour ?? printer.Power_Per_Hour;
+
+        SetUpdatedFields(printer);
 
         await _context.SaveChangesAsync();
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrintHub.DTOs;
 using PrintHub.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrintHub.Controllers;
 
@@ -20,8 +21,15 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] NewMaterialDto dto)
     {
-        var result = await _service.CreateMaterialAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        try
+        {
+            var result = await _service.CreateMaterialAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id}")]
@@ -47,8 +55,15 @@ public class MaterialsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Update(int id, [FromBody] UpdateMaterialDto dto)
     {
-        var updated = await _service.UpdateMaterialAsync(id, dto);
-        return updated == null ? NotFound() : Ok(updated);
+        try
+        {
+            var updated = await _service.UpdateMaterialAsync(id, dto);
+            return updated == null ? NotFound() : Ok(updated);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]

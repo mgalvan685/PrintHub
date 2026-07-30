@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PrintHub.DTOs;
 using PrintHub.Services.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace PrintHub.Controllers;
 
@@ -20,8 +21,15 @@ public class FilamentsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create([FromBody] NewFilamentDto dto)
     {
-        var result = await _service.CreateFilamentAsync(dto);
-        return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        try
+        {
+            var result = await _service.CreateFilamentAsync(dto);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+        }
+        catch (ValidationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpGet("{id}")]

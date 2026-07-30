@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PrintHub.Database;
@@ -11,9 +12,11 @@ using PrintHub.Database;
 namespace PrintHub.Migrations
 {
     [DbContext(typeof(PrintHubContext))]
-    partial class PrintHubContextModelSnapshot : ModelSnapshot
+    [Migration("20260730141951_AddUpdatedByColumns")]
+    partial class AddUpdatedByColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -65,6 +68,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("numeric");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -118,6 +122,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -167,6 +172,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -216,6 +222,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -266,6 +273,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -319,6 +327,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -365,6 +374,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -414,6 +424,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -454,6 +465,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")
@@ -503,6 +515,7 @@ namespace PrintHub.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Updated_By")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime?>("Updated_On")

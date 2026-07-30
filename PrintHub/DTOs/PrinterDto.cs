@@ -7,7 +7,7 @@ public record PrinterDto
     public string Brand { get; init; } = string.Empty;
     public string Type { get; init; } = string.Empty;
     public string Name { get; init; } = string.Empty;
-    public decimal Power_Per_Hour { get; init; } // W/hr
+    public decimal Power_Per_Hour { get; init; } // kWh
 }
 #endregion
 
@@ -17,7 +17,7 @@ public record NewPrinterDto
     public string Brand { get; init; } = string.Empty;
     public string Type { get; init; } = string.Empty;
     public string Name { get; init; } = string.Empty;
-    public decimal Power_Per_Hour { get; init; } // W/hr
+    public decimal Power_Per_Hour { get; init; } // kWh
 }
 
 public class UpdatePrinterDto

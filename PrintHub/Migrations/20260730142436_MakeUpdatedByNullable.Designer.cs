@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PrintHub.Database;
@@ -11,9 +12,11 @@ using PrintHub.Database;
 namespace PrintHub.Migrations
 {
     [DbContext(typeof(PrintHubContext))]
-    partial class PrintHubContextModelSnapshot : ModelSnapshot
+    [Migration("20260730142436_MakeUpdatedByNullable")]
+    partial class MakeUpdatedByNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
