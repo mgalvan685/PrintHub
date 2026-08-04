@@ -35,6 +35,15 @@ builder.Services.AddValidatorsFromAssemblyContaining<NewPrinterDtoValidator>();
 builder.Services.AddDbContext<PrintHubContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("PrintHub")));
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClientApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -46,6 +55,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowClientApp");
 
 app.UseAuthorization();
 
