@@ -32,7 +32,7 @@ public class ProjectService : BaseService, IProjectService
             Description = dto.Description,
             Printer_ID = dto.Printer_ID,
             Print_Time = dto.Print_Time,
-            Labor = dto.Labor
+            Finishing_Time = dto.Finishing_Time
         };
 
         SetCreatedFields(project);
@@ -55,7 +55,7 @@ public class ProjectService : BaseService, IProjectService
             Description = dto.Description,
             Printer_ID = dto.Printer_ID,
             Print_Time = dto.Print_Time,
-            Labor = dto.Labor
+            Finishing_Time = dto.Finishing_Time
         };
 
         SetCreatedFields(project);
@@ -119,7 +119,7 @@ public class ProjectService : BaseService, IProjectService
         dto.Description = dto.Description ?? project.Description;
         dto.Printer_ID = dto.Printer_ID ?? project.Printer_ID;
         dto.Print_Time = dto.Print_Time ?? project.Print_Time;
-        dto.Labor = dto.Labor ?? project.Labor;
+        dto.Finishing_Time = dto.Finishing_Time ?? project.Finishing_Time;
 
         SetUpdatedFields(project);
 

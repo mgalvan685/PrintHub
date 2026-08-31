@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PrintHub.Database;
 using PrintHub.DTOs;
 using PrintHub.Services.Interfaces;
 
@@ -8,11 +10,15 @@ namespace PrintHub.Controllers;
 [Route("api/[controller]")]
 public class ProjectsController : ControllerBase
 {
+    private readonly PrintHubContext _context;
     private readonly IProjectService _service;
+    private readonly IProjectCostService _costService;
 
-    public ProjectsController(IProjectService service)
+    public ProjectsController(PrintHubContext context, IProjectService service, IProjectCostService costService)
     {
+        _context = context;
         _service = service;
+        _costService = costService;
     }
 
     [HttpPost]
@@ -39,6 +45,25 @@ public class ProjectsController : ControllerBase
     {
         var projects = await _service.GetAllAsync();
         return Ok(projects);
+    }
+
+    [HttpGet("{id}/cost")]
+    [ProducesResponseType(typeof(ProjectCostDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public ActionResult<ProjectCostDto> GetCost(int id)
+    {
+        var project = _context.Projects
+            .Include(p => p.Printer)
+            .Include(p => p.ProjectFilaments).ThenInclude(f => f.Filament)
+            .Include(p => p.ProjectMaterials).ThenInclude(m => m.Material)
+            .Include(p => p.PriceModifiers)
+            .FirstOrDefault(p => p.Id == id);
+
+        if (project == null)
+            return NotFound();
+
+        var result = _costService.Calculate(project);
+        return Ok(result);
     }
 
     [HttpPut("{id}")]

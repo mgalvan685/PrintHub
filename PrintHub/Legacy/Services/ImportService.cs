@@ -138,8 +138,8 @@ public class ImportService : IImportService
                 Name = legacy.Name,
                 Description = legacy.Description,
                 Printer_ID = defaultPrinterId,
-                Print_Time = legacy.PrintTime,
-                Labor = legacy.LaborMinutes,
+                Print_Time = (decimal)TimeSpan.Parse(legacy.PrintTime).TotalHours,
+                Finishing_Time = legacy.LaborMinutes,
                 FilamentIds = new List<int>(),
                 MaterialIds = new List<int>()
             };

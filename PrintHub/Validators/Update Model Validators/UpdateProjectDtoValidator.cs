@@ -16,12 +16,12 @@ public class UpdateProjectDtoValidator : AbstractValidator<UpdateProjectDto>
             .When(x => x.Printer_ID != null);
 
         RuleFor(x => x.Print_Time)
-            .Matches(@"^\d{2}:\d{2}:\d{2}$")
+            .GreaterThanOrEqualTo(0)
             .When(x => x.Print_Time != null);
 
-        RuleFor(x => x.Labor)
+        RuleFor(x => x.Finishing_Time)
             .GreaterThanOrEqualTo(0)
-            .When(x => x.Labor != null);
+            .When(x => x.Finishing_Time != null);
 
         RuleForEach(x => x.FilamentIds)
             .GreaterThan(0)

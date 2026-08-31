@@ -19,6 +19,7 @@ public class PrintHubContext : DbContext
     public DbSet<PrintEvent> PrintEvents => Set<PrintEvent>();
     public DbSet<CostBreakdown> CostBreakdowns => Set<CostBreakdown>();
     public DbSet<InventoryTransaction> InventoryTransactions => Set<InventoryTransaction>();
+    public DbSet<GlobalSettings> GlobalSettings => Set<GlobalSettings>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

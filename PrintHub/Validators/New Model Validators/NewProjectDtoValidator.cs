@@ -15,10 +15,9 @@ public class NewProjectDtoValidator : AbstractValidator<NewProjectDto>
             .GreaterThan(0);
 
         RuleFor(x => x.Print_Time)
-            .Matches(@"^\d{2}:\d{2}:\d{2}$")
-            .WithMessage("Print_Time must be in HH:mm:ss format.");
+            .GreaterThanOrEqualTo(0);
 
-        RuleFor(x => x.Labor)
+        RuleFor(x => x.Finishing_Time)
             .GreaterThanOrEqualTo(0);
 
         RuleForEach(x => x.FilamentIds)

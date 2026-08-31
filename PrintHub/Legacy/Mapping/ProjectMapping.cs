@@ -7,6 +7,8 @@ public class ProjectMapping
 {
     public static NewProjectDto ToNewProjectDto(LegacyProjectImport legacy, int defaultPrinterId)
     {
+        var ts = TimeSpan.Parse(legacy.PrintTime);
+
         return new NewProjectDto
         {
             Legacy_Id = legacy.Id,
@@ -15,8 +17,8 @@ public class ProjectMapping
 
             Printer_ID = defaultPrinterId,
 
-            Print_Time = legacy.PrintTime,
-            Labor = legacy.LaborMinutes,
+            Print_Time = (decimal)ts.TotalHours,
+            Finishing_Time = legacy.LaborMinutes,
 
             FilamentIds = legacy.Filaments
                 ?.Select(f => f.FilamentUsed.Id)
