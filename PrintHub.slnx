@@ -1,6 +1,11 @@
 <Solution>
   <Folder Name="/Tests/">
+    <File Path="PrintHub.Services_Tests/TEST_CREATION_GUIDE.md" />
     <Project Path="PrintHub.Services_Tests/PrintHub.Services_Tests.csproj" />
+    <Project Path="PrintHub.Validators_Tests/PrintHub.Validators_Tests.csproj" Id="1e9c1a74-dfd9-4be5-ac5d-96dd66969dea" />
+  </Folder>
+  <Folder Name="/Tests/Solution Items/">
+    <Project Path="Printhub.Mappers_Tests/Printhub.Mappers_Tests.csproj" Id="3f9c7d14-ea88-496c-8e70-ea1aeb26d109" />
   </Folder>
   <Project Path="PrintHub/PrintHub.csproj" />
 </Solution>
