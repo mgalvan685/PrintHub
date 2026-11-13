@@ -12,12 +12,12 @@ public record PrinterDto
 #endregion
 
 #region Input
-public record NewPrinterDto
+public class NewPrinterDto
 {
-    public string Brand { get; init; } = string.Empty;
-    public string Type { get; init; } = string.Empty;
-    public string Name { get; init; } = string.Empty;
-    public decimal Power_Per_Hour { get; init; } // kWh
+    public string Brand { get; set; } = string.Empty;
+    public string Type { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+    public decimal Power_Per_Hour { get; set; } // kWh
 }
 
 public class UpdatePrinterDto
