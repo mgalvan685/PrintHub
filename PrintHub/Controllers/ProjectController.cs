@@ -52,6 +52,14 @@ public class ProjectsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public ActionResult<ProjectCostDto> GetCost(int id)
     {
+        var settings = _context.GlobalSettings.FirstOrDefault();
+
+        if (settings == null)
+        {
+            throw new InvalidOperationException(
+                "Global Settings have not been configured.");
+        }
+
         var project = _context.Projects
             .Include(p => p.Printer)
             .Include(p => p.ProjectFilaments).ThenInclude(f => f.Filament)

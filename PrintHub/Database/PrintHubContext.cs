@@ -25,6 +25,12 @@ public class PrintHubContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
+        modelBuilder.Entity<Project>()
+            .HasOne(p => p.Printer)
+            .WithMany(p => p.Projects)
+            .HasForeignKey(p => p.Printer_ID)
+            .OnDelete(DeleteBehavior.Restrict);
+
         // Example: ProjectFilament relationships
         modelBuilder.Entity<ProjectFilament>(entity =>
         {

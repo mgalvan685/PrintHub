@@ -10,6 +10,4 @@ public interface IProjectService
     Task<List<ProjectDto>> GetAllAsync();
     Task<ProjectDto?> UpdateProjectAsync(int id, UpdateProjectDto dto);
     Task<bool> DeleteProjectAsync(int id);
-    Task AddFilamentToProjectAsync(int projectId, int filamentId);
-    Task AddMaterialToProjectAsync(int projectId, int materialId);
 }

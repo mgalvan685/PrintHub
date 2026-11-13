@@ -9,7 +9,9 @@ public class ProjectProfile : Profile
     public ProjectProfile()
     {
         CreateMap<Project, ProjectDto>()
-            .ForMember(dest => dest.Printer_Name, opt => opt.MapFrom(src => src.Printer.Name));
+            .ForMember(dest => dest.Printer_Name, opt => opt.MapFrom(src => src.Printer.Name))
+            .ForMember(dest => dest.Filaments, opt => opt.MapFrom(src => src.ProjectFilaments))
+            .ForMember(dest => dest.Materials, opt => opt.MapFrom(src => src.ProjectMaterials));
 
         CreateMap<ProjectFilament, ProjectFilamentDto>()
             .ForMember(dest => dest.Filament_ID, opt => opt.MapFrom(src => src.Filament_ID))
@@ -22,5 +24,9 @@ public class ProjectProfile : Profile
             .ForMember(dest => dest.Material_ID, opt => opt.MapFrom(src => src.Material_ID))
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Material.Name))
             .ForMember(dest => dest.Units, opt => opt.MapFrom(src => src.Material.Units));
+
+        CreateMap<GlobalSettings, GlobalSettingsDto>();
+
+        CreateMap<UpdateGlobalSettingsDto, GlobalSettings>();
     }
 }
