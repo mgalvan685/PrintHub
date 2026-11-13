@@ -1,32 +1,164 @@
-# React + TypeScript + Vite
+# PrintHub Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Frontend application for PrintHub, a 3D printing management platform for tracking:
 
-Currently, two official plugins are available:
+- Projects
+- Filaments
+- Printers
+- Materials
+- Cost calculations
+- Production workflows
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Built with:
 
-## React Compiler
+- React
+- TypeScript
+- Vite
+- React Router
+- Axios
+- Material UI (if applicable)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+# Prerequisites
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+Install:
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- Node.js 20+
+- npm 10+
+
+Verify installations:
+
+```bash
+node --version
+npm --version
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+---
+
+# Getting Started
+
+Clone the repository and install dependencies:
+
+```bash
+npm install
+```
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+The application will be available at:
+
+```text
+http://localhost:5173
+```
+
+---
+
+# Backend API
+
+The frontend expects the PrintHub API to be running.
+
+Default backend URL:
+
+```text
+https://localhost:7001
+```
+
+or
+
+```text
+http://localhost:5000
+```
+
+depending on environment configuration.
+
+Start the backend before using features that rely on API data.
+
+---
+
+# Available Scripts
+
+Start development server:
+
+```bash
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
+
+Preview production build:
+
+```bash
+npm run preview
+```
+
+Run linting:
+
+```bash
+npm run lint
+```
+
+---
+
+# Project Structure
+
+```text
+src/
+├── api/
+├── components/
+├── layouts/
+├── pages/
+├── services/
+├── hooks/
+├── types/
+├── routes/
+└── App.tsx
+```
+
+---
+
+# Current Features
+
+## Completed
+
+- Dashboard framework
+- Filament management
+- Printer management
+- API integration
+- Shared layouts/components
+
+## In Progress
+
+- Project cost calculations
+- Global settings management
+
+## Planned
+
+- Projects page
+- Materials page
+- Reporting/dashboard metrics
+- Import/export workflows
+
+---
+
+# Development Notes
+
+PrintHub uses a service-driven backend architecture.
+
+Frontend pages generally follow this pattern:
+
+1. API Service
+2. DTO/Types
+3. Page Component
+4. Form/Dialog Components
+5. Routing Integration
+
+New entity screens should follow existing Filament and Printer implementations for consistency.

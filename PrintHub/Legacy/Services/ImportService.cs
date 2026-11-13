@@ -135,39 +135,34 @@ public class ImportService : IImportService
         {
             var dto = new NewProjectDto
             {
+                Legacy_Id = legacy.Id,
                 Name = legacy.Name,
                 Description = legacy.Description,
+
                 Printer_ID = defaultPrinterId,
+
                 Print_Time = (decimal)TimeSpan.Parse(legacy.PrintTime).TotalHours,
                 Finishing_Time = legacy.LaborMinutes,
-                FilamentIds = new List<int>(),
-                MaterialIds = new List<int>()
+
+                Filaments = new List<NewProjectFilamentDto>(),
+                Materials = new List<NewProjectMaterialDto>()
             };
 
-            var validation = _projectValidator.Validate(dto);
-            if (!validation.IsValid)
-            {
-                result.Errors.Add(new ImportError
-                {
-                    ItemId = legacy.Id,
-                    Message = string.Join("; ", validation.Errors.Select(e => e.ErrorMessage))
-                });
-                continue;
-            }
-
-            // Create project with Legacy_Id
-            var project = await _projectService.CreateProjectAsync(dto, legacy.Id);
-
             //
-            // FILAMENT LINKS
+            // FILAMENTS
             //
             foreach (var f in legacy.Filaments)
             {
-                var filament = await _filamentService.FindByLegacyIdAsync(f.FilamentUsed.Id);
+                var filament = await _filamentService
+                    .FindByLegacyIdAsync(f.FilamentUsed.Id);
 
                 if (filament != null)
                 {
-                    await _projectService.AddFilamentToProjectAsync(project.Id, filament.Id);
+                    dto.Filaments.Add(new NewProjectFilamentDto
+                    {
+                        Filament_ID = filament.Id,
+                        Usage_G = f.AmountUsed
+                    });
                 }
                 else
                 {
@@ -180,17 +175,22 @@ public class ImportService : IImportService
             }
 
             //
-            // MATERIAL LINKS
+            // MATERIALS
             //
             if (legacy.Materials != null)
             {
                 foreach (var m in legacy.Materials)
                 {
-                    var material = await _materialService.FindByLegacyIdAsync(m.MaterialUsed.Id);
+                    var material = await _materialService
+                        .FindByLegacyIdAsync(m.MaterialUsed.Id);
 
                     if (material != null)
                     {
-                        await _projectService.AddMaterialToProjectAsync(project.Id, material.Id);
+                        dto.Materials.Add(new NewProjectMaterialDto
+                        {
+                            Material_ID = material.Id,
+                            Usage = m.AmountUsed
+                        });
                     }
                     else
                     {
@@ -202,6 +202,23 @@ public class ImportService : IImportService
                     }
                 }
             }
+
+            var validation = _projectValidator.Validate(dto);
+
+            if (!validation.IsValid)
+            {
+                result.Errors.Add(new ImportError
+                {
+                    ItemId = legacy.Id,
+                    Message = string.Join("; ",
+                        validation.Errors.Select(e => e.ErrorMessage))
+                });
+
+                continue;
+            }
+
+            var project = await _projectService
+                .CreateProjectAsync(dto, legacy.Id);
 
             result.Imported.Add(project);
         }

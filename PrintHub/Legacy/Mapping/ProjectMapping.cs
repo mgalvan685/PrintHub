@@ -5,7 +5,9 @@ namespace PrintHub.Legacy.Mapping;
 
 public class ProjectMapping
 {
-    public static NewProjectDto ToNewProjectDto(LegacyProjectImport legacy, int defaultPrinterId)
+    public static NewProjectDto ToNewProjectDto(
+    LegacyProjectImport legacy,
+    int defaultPrinterId)
     {
         var ts = TimeSpan.Parse(legacy.PrintTime);
 
@@ -20,14 +22,21 @@ public class ProjectMapping
             Print_Time = (decimal)ts.TotalHours,
             Finishing_Time = legacy.LaborMinutes,
 
-            FilamentIds = legacy.Filaments
-                ?.Select(f => f.FilamentUsed.Id)
-                .ToList() ?? new List<int>(),
+            Filaments = legacy.Filaments?
+                .Select(f => new NewProjectFilamentDto
+                {
+                    Filament_ID = f.FilamentUsed.Id,
+                    Usage_G = f.AmountUsed
+                })
+                .ToList() ?? new(),
 
-            MaterialIds = legacy.Materials
-                ?.Select(m => m.MaterialUsed.Id)
-                .ToList() ?? new List<int>()
+            Materials = legacy.Materials?
+                .Select(m => new NewProjectMaterialDto
+                {
+                    Material_ID = m.MaterialUsed.Id,
+                    Usage = m.AmountUsed
+                })
+                .ToList() ?? new()
         };
     }
-
 }

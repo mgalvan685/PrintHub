@@ -447,9 +447,6 @@ namespace PrintHub.Migrations
                     b.Property<decimal>("Print_Time")
                         .HasColumnType("numeric");
 
-                    b.Property<int>("PrinterId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("Printer_ID")
                         .HasColumnType("integer");
 
@@ -461,7 +458,7 @@ namespace PrintHub.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PrinterId");
+                    b.HasIndex("Printer_ID");
 
                     b.ToTable("Projects");
                 });
@@ -597,8 +594,8 @@ namespace PrintHub.Migrations
                 {
                     b.HasOne("PrintHub.Database.Models.Printer", "Printer")
                         .WithMany("Projects")
-                        .HasForeignKey("PrinterId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("Printer_ID")
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Printer");

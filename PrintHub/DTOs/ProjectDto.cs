@@ -10,8 +10,8 @@ public class ProjectDto
     public int Printer_ID { get; set; }
     public string Printer_Name { get; set; } = null!;
 
-    public string Print_Time { get; set; } = "00:00:00"; // HH:mm:ss
-    public decimal Labor { get; set; }                  // minutes
+    public decimal Print_Time { get; set; } = 0;
+    public decimal Finishing_Time { get; set; } = 0;
 
     public List<ProjectFilamentDto> Filaments { get; set; } = new();
     public List<ProjectMaterialDto>? Materials { get; set; } = new();
@@ -29,8 +29,8 @@ public class NewProjectDto
     public decimal Print_Time { get; set; } = 0;
     public decimal Finishing_Time { get; set; } = 0;
 
-    public List<int> FilamentIds { get; set; } = new();
-    public List<int>? MaterialIds { get; set; } = null;
+    public List<NewProjectFilamentDto> Filaments { get; set; } = new();
+    public List<NewProjectMaterialDto> Materials { get; set; } = new();
 }
 
 public class UpdateProjectDto
@@ -43,6 +43,7 @@ public class UpdateProjectDto
     public decimal? Print_Time { get; set; }
     public decimal? Finishing_Time { get; set; }
 
-    public List<int>? FilamentIds { get; set; }
-    public List<int>? MaterialIds { get; set; }
+    public List<NewProjectFilamentDto>? Filaments { get; set; }
+
+    public List<NewProjectMaterialDto>? Materials { get; set; }
 }

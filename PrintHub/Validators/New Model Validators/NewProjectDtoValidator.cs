@@ -20,11 +20,28 @@ public class NewProjectDtoValidator : AbstractValidator<NewProjectDto>
         RuleFor(x => x.Finishing_Time)
             .GreaterThanOrEqualTo(0);
 
-        RuleForEach(x => x.FilamentIds)
-            .GreaterThan(0);
+        RuleFor(x => x.Filaments)
+            .NotEmpty()
+            .WithMessage("At least one filament is required.");
 
-        RuleForEach(x => x.MaterialIds)
-            .GreaterThan(0)
-            .When(x => x.MaterialIds != null);
+        RuleForEach(x => x.Filaments)
+            .ChildRules(f =>
+            {
+                f.RuleFor(x => x.Filament_ID)
+                    .GreaterThan(0);
+
+                f.RuleFor(x => x.Usage_G)
+                    .GreaterThan(0);
+            });
+
+        RuleForEach(x => x.Materials)
+            .ChildRules(m =>
+            {
+                m.RuleFor(x => x.Material_ID)
+                    .GreaterThan(0);
+
+                m.RuleFor(x => x.Usage)
+                    .GreaterThan(0);
+            });
     }
 }
