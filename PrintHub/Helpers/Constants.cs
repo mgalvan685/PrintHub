@@ -158,6 +158,14 @@ public static class PrinterTypeConstants
     };
 }
 
+public enum RoundingMode
+{
+    Bankers = 0,
+    AwayFromZero = 1,
+    Up = 2,
+    Down = 3
+}
+
 public static class SystemUsersConstants
 {
     public const string SYSTEM_USER = "System";

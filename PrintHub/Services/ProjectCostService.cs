@@ -1,6 +1,7 @@
 ﻿using PrintHub.Database;
 using PrintHub.Database.Models;
 using PrintHub.DTOs;
+using PrintHub.Helpers;
 using PrintHub.Services.Interfaces;
 
 namespace PrintHub.Services;
@@ -8,10 +9,12 @@ namespace PrintHub.Services;
 public class ProjectCostService : BaseService, IProjectCostService
 {
     private readonly PrintHubContext _context;
+    private readonly RoundingMode _roundingMode;
 
     public ProjectCostService(PrintHubContext context)
     {
         _context = context;
+        _roundingMode = context.GlobalSettings.First().Rounding_Mode;
     }
 
     public ProjectCostDto Calculate(Project project)
@@ -48,13 +51,13 @@ public class ProjectCostService : BaseService, IProjectCostService
         // Build DTO
         var dto = new ProjectCostDto
         {
-            FilamentCost = filamentCost,
-            MaterialCost = materialCost,
-            PrinterCost = printerCost,
-            LaborCost = laborCost,
-            ModifierAdjustment = modifierAdjustment,
-            TotalCost = totalCost,
-            FinalPrice = finalPrice,
+            FilamentCost = RoundCurrency(filamentCost),
+            MaterialCost = RoundCurrency(materialCost),
+            PrinterCost = RoundCurrency(printerCost),
+            LaborCost = RoundCurrency(laborCost),
+            ModifierAdjustment = RoundCurrency(modifierAdjustment),
+            TotalCost = RoundCurrency(totalCost),
+            FinalPrice = RoundCurrency(finalPrice),
 
             Filaments = project.ProjectFilaments.Select(f => new FilamentBreakdownDto
             {
@@ -63,7 +66,7 @@ public class ProjectCostService : BaseService, IProjectCostService
                 Color = f.Filament.Color,
                 UsageG = f.Usage_G,
                 CostAtTime = f.Cost_At_Time,
-                Total = f.Usage_G * f.Cost_At_Time
+                Total = RoundCurrency(f.Usage_G * f.Cost_At_Time)
             }).ToList(),
 
             Materials = project.ProjectMaterials.Select(m => new MaterialBreakdownDto
@@ -73,10 +76,32 @@ public class ProjectCostService : BaseService, IProjectCostService
                 Units = m.Units,
                 Usage = m.Usage,
                 CostAtTime = m.Cost_At_Time,
-                Total = m.Usage * m.Cost_At_Time
+                Total = RoundCurrency(m.Usage * m.Cost_At_Time)
             }).ToList()
         };
 
         return dto;
+    }
+
+    private decimal RoundCurrency(
+    decimal value)
+    {
+        return _roundingMode switch
+        {
+            RoundingMode.Bankers =>
+                Math.Round(value, 2, MidpointRounding.ToEven),
+
+            RoundingMode.AwayFromZero =>
+                Math.Round(value, 2, MidpointRounding.AwayFromZero),
+
+            RoundingMode.Up =>
+                Math.Ceiling(value * 100) / 100,
+
+            RoundingMode.Down =>
+                Math.Floor(value * 100) / 100,
+
+            _ =>
+                Math.Round(value, 2, MidpointRounding.AwayFromZero)
+        };
     }
 }

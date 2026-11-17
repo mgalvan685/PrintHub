@@ -161,6 +161,10 @@ namespace PrintHub.Migrations
                     b.Property<int?>("Legacy_Id")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Rounding_Mode")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Updated_By")
                         .HasColumnType("text");
 
