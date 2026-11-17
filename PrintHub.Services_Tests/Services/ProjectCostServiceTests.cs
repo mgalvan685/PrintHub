@@ -1,9 +1,9 @@
-using Xunit;
 using Microsoft.EntityFrameworkCore;
 using PrintHub.Database;
 using PrintHub.Database.Models;
-using PrintHub.DTOs;
+using PrintHub.Helpers;
 using PrintHub.Services;
+using Xunit;
 
 namespace PrintHub.Services_Tests.Services;
 
@@ -40,7 +40,8 @@ public class ProjectCostServiceTests : IDisposable
             Default_Markup = 0.20m,           // 20% markup
             Electricity_Rate = 0.15m,         // $0.15 per kWh
             Labor_Rate = 25.00m,              // $25 per hour
-            Default_Waste_Multiplier = 1.1m  // 10% waste
+            Default_Waste_Multiplier = 1.1m,  // 10% waste
+            Rounding_Mode = RoundingMode.AwayFromZero
         };
         _context.GlobalSettings.Add(_testSettings);
 
@@ -144,11 +145,11 @@ public class ProjectCostServiceTests : IDisposable
         Assert.Equal(2.50m, result.FilamentCost);
         Assert.Equal(0m, result.MaterialCost);
         // Printer cost = 1.0 * 0.5 * 0.15 = 0.075
-        Assert.Equal(0.075m, result.PrinterCost);
+        Assert.Equal(0.08m, result.PrinterCost);
         // Labor cost = 0.5 * 25.00 = 12.50
         Assert.Equal(12.50m, result.LaborCost);
         // Total = 2.50 + 0 + 0.075 + 12.50 = 15.075
-        Assert.Equal(15.075m, result.TotalCost);
+        Assert.Equal(15.08m, result.TotalCost);
         // Final price = 15.075 * 1.20 = 18.09
         Assert.Equal(18.09m, result.FinalPrice);
     }
@@ -202,11 +203,11 @@ public class ProjectCostServiceTests : IDisposable
         // Material cost = 0.5 * 50.00 = 25.00
         Assert.Equal(25.00m, result.MaterialCost);
         // Printer cost = 1.0 * 0.5 * 0.15 = 0.075
-        Assert.Equal(0.075m, result.PrinterCost);
+        Assert.Equal(0.08m, result.PrinterCost);
         // Labor cost = 0.5 * 25.00 = 12.50
         Assert.Equal(12.50m, result.LaborCost);
         // Total = 0 + 25.00 + 0.075 + 12.50 = 37.575
-        Assert.Equal(37.575m, result.TotalCost);
+        Assert.Equal(37.58m, result.TotalCost);
         // Final price = 37.575 * 1.20 = 45.09
         Assert.Equal(45.09m, result.FinalPrice);
     }
@@ -599,7 +600,7 @@ public class ProjectCostServiceTests : IDisposable
         var result2 = _service.Calculate(project2);
         // Printer cost = 1.0 * 0.5 * 0.15 = 0.075
         // Final price = 0.075 * 1.50 = 0.1125
-        Assert.Equal(0.1125m, result2.FinalPrice);
+        Assert.Equal(0.11m, result2.FinalPrice);
     }
 
     [Fact]

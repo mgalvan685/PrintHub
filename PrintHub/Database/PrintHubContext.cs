@@ -57,6 +57,10 @@ public class PrintHubContext : DbContext
                   .HasForeignKey(pm => pm.Material_ID)
                   .OnDelete(DeleteBehavior.Restrict);
         });
+
+        modelBuilder.Entity<GlobalSettings>()
+            .Property(x => x.Rounding_Mode)
+            .HasConversion<string>();
     }
 
     public override int SaveChanges()

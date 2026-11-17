@@ -37,10 +37,11 @@ public class GlobalSettingsService : IGlobalSettingsService
             _db.GlobalSettings.Add(settings);
         }
 
-        settings.Default_Markup = dto.Default_Markup;
-        settings.Electricity_Rate = dto.Electricity_Rate;
-        settings.Labor_Rate = dto.Labor_Rate;
-        settings.Default_Waste_Multiplier = dto.Default_Waste_Multiplier;
+        settings.Default_Markup = dto.Default_Markup ?? settings.Default_Markup;
+        settings.Electricity_Rate = dto.Electricity_Rate ?? settings.Electricity_Rate;
+        settings.Labor_Rate = dto.Labor_Rate ?? settings.Labor_Rate;
+        settings.Default_Waste_Multiplier = dto.Default_Waste_Multiplier ?? settings.Default_Waste_Multiplier;
+        settings.Rounding_Mode = dto.Rounding_Mode ?? settings.Rounding_Mode;
 
         await _db.SaveChangesAsync();
 

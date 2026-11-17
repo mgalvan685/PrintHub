@@ -2,6 +2,7 @@ using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using PrintHub.Database;
 using PrintHub.Database.Models;
+using PrintHub.Helpers;
 using PrintHub.Legacy.Services;
 using PrintHub.Legacy.Services.Interfaaces;
 using PrintHub.Mappers;
@@ -62,7 +63,8 @@ using (var scope = app.Services.CreateScope())
             Electricity_Rate = 0.14m,
             Labor_Rate = 20.00m,
             Default_Markup = 1.50m,
-            Default_Waste_Multiplier = 1.10m
+            Default_Waste_Multiplier = 1.10m,
+            Rounding_Mode = RoundingMode.AwayFromZero
         });
 
         db.SaveChanges();

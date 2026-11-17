@@ -1,4 +1,6 @@
-﻿namespace PrintHub.Database.Models;
+﻿using PrintHub.Helpers;
+
+namespace PrintHub.Database.Models;
 
 public class GlobalSettings : BaseEntity
 {
@@ -6,4 +8,5 @@ public class GlobalSettings : BaseEntity
     public decimal Labor_Rate { get; set; }
     public decimal Default_Markup { get; set; }
     public decimal Default_Waste_Multiplier { get; set; }
+    public RoundingMode Rounding_Mode { get; set; }
 }

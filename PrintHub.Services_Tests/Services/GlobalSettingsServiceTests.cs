@@ -1,11 +1,12 @@
 using AutoMapper;
-using Moq;
-using Xunit;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using PrintHub.Database;
 using PrintHub.Database.Models;
 using PrintHub.DTOs;
+using PrintHub.Helpers;
 using PrintHub.Services;
+using Xunit;
 
 namespace PrintHub.Services_Tests.Services;
 
@@ -33,7 +34,8 @@ public class GlobalSettingsServiceTests : IDisposable
                 Default_Markup = settings.Default_Markup,
                 Electricity_Rate = settings.Electricity_Rate,
                 Labor_Rate = settings.Labor_Rate,
-                Default_Waste_Multiplier = settings.Default_Waste_Multiplier
+                Default_Waste_Multiplier = settings.Default_Waste_Multiplier,
+                Rounding_Mode = settings.Rounding_Mode
             });
 
         _service = new GlobalSettingsService(_context, _mockMapper.Object);
@@ -412,6 +414,69 @@ public class GlobalSettingsServiceTests : IDisposable
         Assert.Equal(typeof(GlobalSettingsDto), result.GetType());
     }
 
+    [Fact]
+    public async Task UpdateAsync_UpdatesRoundingMode()
+    {
+        // Arrange
+        var existingSettings = new GlobalSettings
+        {
+            Default_Markup = 0.20m,
+            Electricity_Rate = 0.15m,
+            Labor_Rate = 25.00m,
+            Default_Waste_Multiplier = 1.1m,
+            Rounding_Mode = RoundingMode.Bankers
+        };
+
+        _context.GlobalSettings.Add(existingSettings);
+
+        await _context.SaveChangesAsync();
+
+        var updateDto = new UpdateGlobalSettingsDto
+        {
+            Rounding_Mode = RoundingMode.AwayFromZero
+        };
+
+        // Act
+        var result = await _service.UpdateAsync(updateDto);
+
+        // Assert
+        Assert.NotNull(result);
+
+        Assert.Equal(RoundingMode.AwayFromZero, result.Rounding_Mode);
+    }
+
+    [Fact]
+    public async Task UpdateAsync_PersistsRoundingMode()
+    {
+        // Arrange
+        var existingSettings = new GlobalSettings
+        {
+            Default_Markup = 0.20m,
+            Electricity_Rate = 0.15m,
+            Labor_Rate = 25.00m,
+            Default_Waste_Multiplier = 1.1m,
+            Rounding_Mode = RoundingMode.Bankers
+        };
+
+        _context.GlobalSettings.Add(existingSettings);
+
+        await _context.SaveChangesAsync();
+
+        // Act
+        await _service.UpdateAsync(
+            new UpdateGlobalSettingsDto
+            {
+                Rounding_Mode = RoundingMode.Up
+            });
+
+        var retrieved = await _service.GetAsync();
+
+        // Assert
+        Assert.NotNull(retrieved);
+
+        Assert.Equal(RoundingMode.Up, retrieved.Rounding_Mode);
+    }
+
     #endregion
 
     #region Integration Tests
@@ -452,6 +517,69 @@ public class GlobalSettingsServiceTests : IDisposable
         Assert.Equal(0.30m, afterUpdate.Electricity_Rate);
         Assert.Equal(60.00m, afterUpdate.Labor_Rate);
         Assert.Equal(1.5m, afterUpdate.Default_Waste_Multiplier);
+    }
+
+    #endregion
+
+    #region Rounding Mode Tests
+
+    [Theory]
+    [InlineData(RoundingMode.Bankers)]
+    [InlineData(RoundingMode.AwayFromZero)]
+    [InlineData(RoundingMode.Up)]
+    [InlineData(RoundingMode.Down)]
+    public async Task UpdateAsync_AllRoundingModes_PersistCorrectly(
+    RoundingMode mode)
+    {
+        // Arrange
+        var settings = new GlobalSettings
+        {
+            Default_Markup = 1.75m,
+            Electricity_Rate = 0.16m,
+            Labor_Rate = 20m,
+            Default_Waste_Multiplier = 1.1m,
+            Rounding_Mode = RoundingMode.Bankers
+        };
+
+        _context.GlobalSettings.Add(settings);
+
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _service.UpdateAsync(
+            new UpdateGlobalSettingsDto
+            {
+                Rounding_Mode = mode
+            });
+
+        // Assert
+        Assert.Equal(mode, result.Rounding_Mode);
+    }
+
+    [Fact]
+    public async Task GetAsync_ReturnsCorrectRoundingMode()
+    {
+        // Arrange
+        var settings = new GlobalSettings
+        {
+            Default_Markup = 0.20m,
+            Electricity_Rate = 0.15m,
+            Labor_Rate = 25.00m,
+            Default_Waste_Multiplier = 1.1m,
+            Rounding_Mode = RoundingMode.AwayFromZero
+        };
+
+        _context.GlobalSettings.Add(settings);
+        await _context.SaveChangesAsync();
+
+        // Act
+        var result = await _service.GetAsync();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.Equal(
+            RoundingMode.AwayFromZero,
+            result.Rounding_Mode);
     }
 
     #endregion
